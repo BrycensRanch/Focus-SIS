@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@google-cloud/local-auth": "^2.1.0",
     "axios": "^1.2.3",
     "edge-paths": "^2.2.1",
@@ -17,12 +16,7 @@
     "puppeteer-extra-plugin-adblocker": "^2.13.5",
     "puppeteer-extra-plugin-anonymize-ua": "^2.4.4",
     "puppeteer-extra-plugin-block-resources": "^2.4.2",
-    "puppeteer-extra-plugin-devtools": "^2.4.4",
-    "puppeteer-extra-plugin-stealth": "^2.11.1",
-    "puppeteer-full-page-screenshot": "^1.2.2",
-    "puppeteer-screen-recorder": "^2.1.2",
-    "puppeteer-table-parser": "^2.1.0",
-    "request-promise-native": "^1.0.9"
+    "puppeteer-extra-plugin-stealth": "^2.11.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
