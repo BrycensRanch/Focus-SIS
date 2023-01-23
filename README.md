@@ -41,7 +41,7 @@ If you can, you should try to run this project LOCALLY. Not behind any VPN or an
 
 ## Getting Started
 
-- Install Node.js using [fnm](https://github.com/Schniz/fnm)
+- [Install Node.js](https://nodejs.org/en/download/)
 - Run `npm install`
 - Rename `example.creds.json` to `creds.json`
 - Populate the JSON file with your credentials
