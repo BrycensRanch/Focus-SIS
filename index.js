@@ -182,8 +182,14 @@ console.log(1)
             if (request.url().includes('StudentRCGrades.php')){
                 responseBody = await response.buffer();
                 responseBody = JSON.parse(await responseBody.toString());
+                try {
+                    await fs.writeFile('./all-grades.json', JSON.stringify(responseBody[0].result.rows, null, 2));
+                }
+                catch (e) {
+                    console.error(e);
+                    return;
+                }
                 // const activeClassesRows = responseBody[0].result.rows.filter(r => r.school_name.includes("HIGH") && r.syear === (new Date().getFullYear() - 1) && Number(r.credits_earned) <= 1)
-                await fs.writeFile('./all-grades.json', JSON.stringify(responseBody[0].result.rows, null, 2));
                 const activeClassesRows = responseBody[0].result.rows.filter(r => classes.find(c => c.courseId === r.course_number))
                 const responseJson = responseBody
 
