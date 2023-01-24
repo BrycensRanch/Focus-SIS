@@ -37,7 +37,6 @@ If you can, you should try to run this project LOCALLY. Not behind any VPN or an
 - Webhook/POST to another service?
 - Repeated scrapping
 - SQLite integration?
-- Assignment scrapping (I literally couldn't open inspect element on this page, so it wasn't added)
 - Types
 
 ## Getting Started
