@@ -26,7 +26,7 @@ This scrapper was designed around Palm Beach County's District portal. I am awar
 - Session saved (we legit just save cookies, it's that easy)
 - Saves your active classes grades to a JSON file.
 - Evasion measures + tries to act like a human
-- Assignment parsing [WIP; only works for classes that use the traditional 100% A approach instead of "percent" where the grade column is not entered]
+- Assignment parsing
 
 ## Tips
 
