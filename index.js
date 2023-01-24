@@ -14,14 +14,12 @@ const {createCursor } = require('ghost-cursor')
 const {
     DEFAULT_INTERCEPT_RESOLUTION_PRIORITY
 } = require('puppeteer')
-const { tableParser } = require('puppeteer-table-parser')
 
 // add stealth plugin and use defaults (all evasion techniques)
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
+
 // puppeteer.use(require('puppeteer-extra-plugin-anonymize-ua')()) We don't need A new device has been associated with your Focus account messages
-const devtools = require('puppeteer-extra-plugin-devtools')()
-puppeteer.use(devtools)
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
 puppeteer.use(
     AdblockerPlugin({
@@ -34,7 +32,7 @@ const fs = require('fs-extra')
 var util = require("util");
 
 const puppeterOptions = {
-    headless: true,
+    headless: false,
     executablePath: getEdgePath(),
     args: []
 };
@@ -133,7 +131,6 @@ console.log(1)
             }
         })
       );
-      await fs.writeFile('./grades.json', JSON.stringify(classes, null, 2));
     const userAgent = await browser.userAgent()
     // await page.waitForNavigation({
     //     waitUntil: 'networkidle2'
@@ -180,8 +177,15 @@ console.log(1)
         if (request.redirectChain().length === 0) {
             // Because body can only be accessed for non-redirect responses.
             if (request.url().includes('StudentRCGrades.php')){
-                responseBody = await response.buffer();
-                responseBody = JSON.parse(await responseBody.toString());
+                try {
+                    responseBody = await response.buffer();
+                    responseBody = JSON.parse(await responseBody.toString());
+                }
+                catch (e) {
+                    console.error(e)
+                    return;
+                }
+                console.log(JSON.stringify(responseBody).length < 100 ? responseBody : '' )
                 try {
                     await fs.writeFile('./all-grades.json', JSON.stringify(responseBody[0].result.rows, null, 2));
                 }
@@ -197,11 +201,45 @@ console.log(1)
                 const firstrow = responseJson[0].result.rows[0]
                 const grades = []
                 await activeClassesRows.forEach(async(r) => {
-                    const gradeForClass = {period: r.period_name, name: r.course_name, room: r.room,  teacher: r.teacher_name, grade: r[`${quarter.toLowerCase()}_mp_grade`] || "NG", school_name: r.school_name, school_year: r.syear, school_year_human: r.syear_display}
+                    const gradeForClass = {period: r.period_name, name: r.course_name, room: r.room,  courseId: r.course_number,teacher: r.teacher_name, grade: r[`${quarter.toLowerCase()}_mp_grade`] || "NG", school_name: r.school_name, school_year: r.syear, school_year_human: r.syear_display, assignments: []}
                     grades.push(gradeForClass)
                 })
+
+                for (const activeClass of classes) {
+                    const detailedClassDetails = responseJson[0].result.rows.find((r => r.course_number === activeClass.courseId))
+                    const assignmentPage = await browser.newPage();
+                    await assignmentPage.goto(detailedClassDetails[`${quarter.toLowerCase()}_mp_grade_href`], {waitUntil: 'networkidle2'})
+                    const parser = require('any-date-parser');
+
+                    const rawClassAssignments = await assignmentPage.evaluate(
+                        () => Array.from(
+                          document.querySelectorAll('.grades-grid > tbody > tr'),
+                          row => Array.from(row.querySelectorAll('th, td'), cell => cell.innerText)
+                        )
+                      );
+                      const classAssignments = await rawClassAssignments.map(c => {
+                        // hard coded from tables in sis... if this changes, problems lie ahead
+                        return {
+                            name: c[1],
+                            pointsEarned: c[2],
+                            percent: c[3],
+                            grade: c[4],
+                            comment: c[5],
+                            assigned: parser.fromString(c[6]),
+                            due: parser.fromString(c[7]),
+                            lastModified: !!c[8].trim() ? parser.fromString(c[8]) : null,
+                            category: c[9],
+                            resources: c[10],
+                        }
+                    })
+                      await fs.writeFile(`./assignments-${detailedClassDetails.teacher_name} - ${detailedClassDetails.course_name} (${detailedClassDetails.period_name}).json`, JSON.stringify(classAssignments, null, 2));
+                      grades.find((g) => activeClass.courseId === g.courseId).assignments = classAssignments
+                      await assignmentPage.close()
+                }
                 const user = {fname: firstrow.student_first_name, lname: firstrow.student_last_name, number: Number(firstrow.student_id)};
                 console.log(`Grades for ${user.fname} ${user.lname} (${user.number}) are:\n${grades.filter(g => g.school_name.includes("HIGH")).map(r => JSON.stringify(r)).join("\n")}`)
+                await fs.writeFile('./grades.json', JSON.stringify(grades, null, 2));
+
 
             }
         }
