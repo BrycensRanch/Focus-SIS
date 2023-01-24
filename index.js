@@ -28,6 +28,7 @@ puppeteer.use(
     })
 )
 const creds = require('./creds.json');
+const getGrade = require('./grade.js')
 const fs = require('fs-extra')
 var util = require("util");
 
@@ -219,7 +220,7 @@ console.log(1)
                       );
                       const classAssignments = await rawClassAssignments.map(c => {
                         // hard coded from tables in sis... if this changes, problems lie ahead
-                        return {
+                        return c[2].includes("/") ? {
                             name: c[1],
                             pointsEarned: c[2],
                             percent: c[3],
@@ -230,7 +231,18 @@ console.log(1)
                             lastModified: !!c[8].trim() ? parser.fromString(c[8]) : null,
                             category: c[9],
                             resources: c[10],
-                        }
+                        } : {
+                            name: c[1],
+                            percent: c[2] + "%",
+                            pointsEarned: c[2] + " / 100",
+                            grade: getGrade(c[2]),
+                            comment: c[3],
+                            assigned: parser.fromString(c[4]),
+                            due: parser.fromString(c[5]),
+                            lastModified: parser.fromString(c[6]),
+                            category: c[7],
+                            resources: c[8] 
+                        } 
                     })
                       await fs.writeFile(`./assignments-${detailedClassDetails.teacher_name} - ${detailedClassDetails.course_name} (${detailedClassDetails.period_name}).json`, JSON.stringify(classAssignments, null, 2));
                       grades.find((g) => activeClass.courseId === g.courseId).assignments = classAssignments
