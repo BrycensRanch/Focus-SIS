@@ -15,6 +15,25 @@ const {
     DEFAULT_INTERCEPT_RESOLUTION_PRIORITY
 } = require('puppeteer')
 
+const { PuppeteerScreenRecorder } = require('puppeteer-screen-recorder');
+
+const Config = {
+  followNewTab: true,
+  fps: 25,
+  ffmpeg_Path: null,
+  videoFrame: {
+    width: 1024,
+    height: 768,
+  },
+  videoCrf: 18,
+  videoCodec: 'libx264',
+  videoPreset: 'ultrafast',
+  videoBitrate: 1000,
+  autopad: {
+    color: 'black' | '#35A5FF',
+  },
+  aspectRatio: '4:3', 
+}
 // add stealth plugin and use defaults (all evasion techniques)
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
@@ -46,6 +65,10 @@ async function runTheSexyCode() {
     const page = await browser.newPage();
     await initPage.close();
 
+const recorder = new PuppeteerScreenRecorder(page, Config);
+
+const savePath = './demo.mov';
+await recorder.start(savePath);
     try {
         const cookiesString = await fs.readFile('./cookies.json');
         const previousCookies = JSON.parse(cookiesString);
@@ -265,7 +288,7 @@ grades.push(gradeForClass)
                 const user = {fname: firstrow.student_first_name, lname: firstrow.student_last_name, number: Number(firstrow.student_id)};
                 console.log(`Grades for ${user.fname} ${user.lname} (${user.number}) are:\n${grades.filter(g => g.school_name.includes("HIGH")).map(r => JSON.stringify(r)).join("\n")}`)
                 await fs.writeFile('./grades.json', JSON.stringify(grades, null, 2));
-
+await recorder.stop();
 
             }
         }
