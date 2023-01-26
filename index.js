@@ -19,6 +19,8 @@ const {
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
 
+const shellExec = require("shell-exec").default
+
 // puppeteer.use(require('puppeteer-extra-plugin-anonymize-ua')()) We don't need A new device has been associated with your Focus account messages
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
 puppeteer.use(
