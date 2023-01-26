@@ -87,7 +87,7 @@ async function doWork(auth) {
     // Do the magic
     const assignmentRes = await classroom.courses.courseWork.list({
         // Identifier of the course. This identifier can be either the Classroom-assigned identifier or an alias.
-        courseId: course.id
+        courseId: course.id,
         // Optional sort ordering for results. A comma-separated list of fields with an optional sort direction keyword. Supported fields are `updateTime` and `dueDate`. Supported direction keywords are `asc` and `desc`. If not specified, `updateTime desc` is the default behavior. Examples: `dueDate asc,updateTime desc`, `updateTime,dueDate desc`
         orderBy: 'updateTime',
         // Maximum number of items to return. Zero or unspecified indicates that the server may assign a maximum. The server may return fewer than the specified number of results.
