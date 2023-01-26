@@ -69,11 +69,10 @@ async function authorize() {
 }
 
 /**
- * Lists the first 10 courses the user has access to.
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-async function listCourses(auth) {
+async function doWork(auth) {
   const classroom = google.classroom({version: 'v1', auth});
   const res = await classroom.courses.list({
     pageSize: 0,
@@ -109,6 +108,8 @@ async function listCourses(auth) {
   courses.forEach((course) => {
     console.log(`${course.name} (${course.id}) has ${course.assignments.length + 1}`);
   });
+  await fs.writeFile('./googleClassroomCourses.json', JSON.stringify(courses, null, 2));
+  return courses;
 }
 
-authorize().then(listCourses).catch(console.error);
+authorize().then(doWork).catch(console.error);
