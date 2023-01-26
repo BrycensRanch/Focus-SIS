@@ -38,6 +38,7 @@ If you can, you should try to run this project LOCALLY. Not behind any VPN or an
 - Repeated scrapping
 - SQLite integration?
 - Types
+- Not Graded assignment parsing 😭
 
 ## Getting Started
 
