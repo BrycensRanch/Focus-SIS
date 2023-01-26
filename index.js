@@ -140,7 +140,7 @@ console.log(1)
     const cursor = createCursor(page)
     await page.waitForSelector("body > div.site-container.sis-package > div.site-middle > nav > div.parent-menu-options-container > div.parent-menu-icons > a:nth-child(7)")
     await cursor.click("body > div.site-container.sis-package > div.site-middle > nav > div.parent-menu-options-container > div.parent-menu-icons > a:nth-child(7)")
-    await page.waitForNavigation()
+    await page.waitForNavigation().catch(() => null) // sometimes, this breaks.
     await cursor.click("body > div.site-container.sis-package > div.site-middle > div > main > div > div.student-grades-top > form > button")
 
     // const finalResponse = await page.waitForResponse("${SISFocusBaseURL}/classes/FocusModule.class.php?force_package=SIS&modname=Grades%2FStudentRCGrades.php")
@@ -291,6 +291,7 @@ async function handleError(e) {
     }
     else {
         console.error("Unexpected error: " + e.message)
+        console.error(e)
     }
 }
 runTheSexyCode().catch(handleError)
