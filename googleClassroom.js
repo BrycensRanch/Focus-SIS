@@ -75,6 +75,7 @@ async function authorize() {
 async function doWork(auth) {
   const classroom = google.classroom({version: 'v1', auth});
   const res = await classroom.courses.list({
+    courseStates: ["ACTIVE"],
     pageSize: 0,
   });
 
