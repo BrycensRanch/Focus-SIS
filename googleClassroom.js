@@ -100,7 +100,7 @@ async function doWork(auth) {
   })
   if (!assignments || assignments.length === 0) {
     console.log('No assignments found.');
-    return;
+    continue;
   }
   course.assignments = assignments
 } 
