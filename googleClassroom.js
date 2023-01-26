@@ -106,7 +106,7 @@ async function doWork(auth) {
 } 
   console.log('Courses:');
   courses.forEach((course) => {
-    console.log(`${course.name} (${course.id}) has ${course.assignments.length + 1}`);
+    console.log(`${course.name} (${course.id}) has ${course.assignments?.length} assignments`);
   });
   await fs.writeFile('./googleClassroomCourses.json', JSON.stringify(courses, null, 2));
   return courses;
