@@ -111,6 +111,17 @@ console.log(1)
     const localStorage = await page.evaluate(() => JSON.stringify(window.localStorage));
     await fs.writeFile('./localStorage.json', JSON.stringify(localStorage, null, 2));
     console.log("WE'RE IN!!1 HACKER MOMENT!!!");
+    // trust me bro
+    await shellExec("node googleClassroom.js").catch(() => null)
+     
+                        try {
+                    const googleClassroomCoursesString = await fs.readFile('./googleClassroomCourses.json');
+                    const googleClassroomCourses = JSON.parse(googleClassroomCoursesString)
+                    
+                    } catch(e) {
+                    console.error("Failed to read googleClassroomCourses.json")
+                    console.error(e)
+                    }
     let quarter = await page.evaluate(() => {
         let quarterElement = document.getElementsByClassName("student-block-mp active")[0]
         return quarterElement ? quarterElement.innerText : "N/A"
@@ -202,8 +213,9 @@ console.log(1)
                 const firstrow = responseJson[0].result.rows[0]
                 const grades = []
                 await activeClassesRows.forEach(async(r) => {
-                    const gradeForClass = {period: r.period_name, name: r.course_name, room: r.room,  courseId: r.course_number,teacher: r.teacher_name, grade: r[`${quarter.toLowerCase()}_mp_grade`] || "NG", school_name: r.school_name, school_year: r.syear, school_year_human: r.syear_display, assignments: []}
-                    grades.push(gradeForClass)
+                    const gradeForClass = {period: r.period_name, name: r.course_name, room: r.room,  courseId: r.course_number,teacher: r.teacher_name, grade: r[`${quarter.toLowerCase()}_mp_grade`] || "NG", school_name: r.school_name, school_year: r.syear, school_year_human: r.syear_display, assignments: [], googleClassroom: {}}
+                    
+grades.push(gradeForClass)
                 })
 
                 for (const activeClass of classes) {
