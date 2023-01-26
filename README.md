@@ -13,7 +13,7 @@ Logins into SIS and scrapes grades and quarter for current classes, not to menti
 
 ## How this was made possible?
 
-Usually, it's VERY easy to scrape a website for data, especially one as simple as Focus SIS, where it lacks any type of captchas and is VERY organized. However, they implemented a anti inspect element script that prevents you from opening Inspect Element. Thanks to the fact that the script isn't inlined, it isn't always loaded first, so you can cancel loading Focus SIS when you have the dashboard loaded, but not other non-critical scripts. 
+Usually, it's VERY easy to scrape a website for data, especially one as simple as Focus SIS, which lacks any type of captchas and is VERY organized. However, they implemented an anti-inspect element script that prevents you from opening Inspect Element. Thanks to the fact that the script isn't inlined, it isn't always loaded first, so you can cancel loading Focus SIS when you have the dashboard loaded, but not other non-critical scripts.
 
 ## Things to be aware of
 
