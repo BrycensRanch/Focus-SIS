@@ -155,11 +155,10 @@ async function runTheSexyCode() {
     'body > div.site-container.sis-package > div.site-middle > nav > div.parent-men' +
     'u-options-container > div.parent-menu-icons > a:nth-child(7)'
   );
-  await page.waitForNavigation().catch(() => null); // sometimes, this breaks.
-  await cursor.click(
-    'body > div.site-container.sis-package > div.site-middle > div > main > div > d' +
-    'iv.student-grades-top > form > button'
-  );
+  const formSubmitButtonSelector = 'body > div.site-container.sis-package > div.site-middle > div > main > div > d' +
+  'iv.student-grades-top > form > button'
+  await page.waitForSelector(formSubmitButtonSelector)
+  await cursor.click(formSubmitButtonSelector);
 
   // const finalResponse = await
   // page.waitForResponse("${SISFocusBaseURL}/classes/FocusModule.class.php?force_package=SIS&modname=Grades%2FStudentRCGrades.php")
