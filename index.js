@@ -71,19 +71,7 @@ async function runTheSexyCode() {
     console.error('Failed to load cookies, oh well..');
     console.error(e.message);
   }
-  try {
-    const localStorage = await fs.readFile('./localStorage.json');
-
-    const deserializedStorage = JSON.parse(localStorage);
-    await page.evaluate((deserializedStorage) => {
-      for (const key in deserializedStorage) {
-        localStorage.setItem(key, deserializedStorage[key]);
-      }
-      localStorage.setItem('debug', 'true');
-    }, deserializedStorage);
-  } catch (e) {}
   await page.goto(`${SISFocusBaseURL}/Modules.php?modname=misc%2FPortal.php`);
-
   await page.waitForNetworkIdle();
   const loginFormExists = await page.$eval('#main-login-form', () => true).catch(
     () => false
@@ -121,13 +109,6 @@ async function runTheSexyCode() {
 
   const cookies = await page.cookies();
   await fs.writeFile('./cookies.json', JSON.stringify(cookies, null, 2));
-  const localStorage = await page.evaluate(
-    () => JSON.stringify(window.localStorage)
-  );
-  await fs.writeFile(
-    './localStorage.json',
-    JSON.stringify(localStorage, null, 2)
-  );
   console.log('WE"RE IN!!1 HACKER MOMENT!!!');
   // trust me bro
   await shellExec('node googleClassroom.js').catch(() => null);
