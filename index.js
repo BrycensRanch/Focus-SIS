@@ -4,9 +4,6 @@
 
 const SISFocusBaseURL = "https://sis.palmbeachschools.org/focus"
 
-let {
-    getEdgePath,
-} = require("edge-paths")
 // puppeteer-extra is a drop-in replacement for puppeteer,
 // it augments the installed puppeteer with plugin functionality
 const puppeteer = require('puppeteer-extra')
@@ -31,10 +28,11 @@ const creds = require('./creds.json');
 const getGrade = require('./grade.js')
 const fs = require('fs-extra')
 var util = require("util");
+const getBrowserPath = require("./getBrowser.js")
 
 const puppeterOptions = {
     headless: false,
-    executablePath: getEdgePath(),
+    executablePath: getBrowserPath(),
     args: []
 };
 
