@@ -75,6 +75,7 @@ async function authorize() {
 async function doWork(auth) {
   const classroom = google.classroom({version: 'v1', auth});
   const res = await classroom.courses.list({
+    courseStates: ["ACTIVE"],
     pageSize: 0,
   });
 
@@ -87,7 +88,7 @@ async function doWork(auth) {
     // Do the magic
     const assignmentRes = await classroom.courses.courseWork.list({
         // Identifier of the course. This identifier can be either the Classroom-assigned identifier or an alias.
-        courseId: course.id
+        courseId: course.id,
         // Optional sort ordering for results. A comma-separated list of fields with an optional sort direction keyword. Supported fields are `updateTime` and `dueDate`. Supported direction keywords are `asc` and `desc`. If not specified, `updateTime desc` is the default behavior. Examples: `dueDate asc,updateTime desc`, `updateTime,dueDate desc`
         orderBy: 'updateTime',
         // Maximum number of items to return. Zero or unspecified indicates that the server may assign a maximum. The server may return fewer than the specified number of results.
@@ -100,13 +101,13 @@ async function doWork(auth) {
   })
   if (!assignments || assignments.length === 0) {
     console.log('No assignments found.');
-    return;
+    continue;
   }
   course.assignments = assignments
 } 
   console.log('Courses:');
   courses.forEach((course) => {
-    console.log(`${course.name} (${course.id}) has ${course.assignments.length + 1}`);
+    console.log(`${course.name} (${course.id}) has ${course.assignments?.length} assignments`);
   });
   await fs.writeFile('./googleClassroomCourses.json', JSON.stringify(courses, null, 2));
   return courses;
