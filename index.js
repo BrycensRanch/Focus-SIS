@@ -48,10 +48,11 @@ const getGrade = require('./grade.js')
 const fs = require('fs-extra')
 var util = require("util");
 const getBrowserPath = require("./getBrowser.js")
-
+const browserPath = getBrowserPath()
+ 
 const puppeterOptions = {
     headless: false,
-    executablePath: getBrowserPath(),
+    browserPath ? executablePath: browserPath : '':'',
     args: []
 };
 
