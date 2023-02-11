@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "any-date-parser": "^1.5.3",
-    "edge-paths": "^2.2.1",
+    "edge-paths": "^3.0.0",
     "fs-extra": "^11.1.0",
     "ghost-cursor": "^1.1.16",
     "puppeteer": "^19.0.0",
