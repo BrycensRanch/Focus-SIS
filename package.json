@@ -9,7 +9,7 @@
     "fs-extra": "^11.1.1",
     "ghost-cursor": "^1.1.18",
     "puppeteer": "^19.8.0",
-    "puppeteer-extra": "^3.3.4",
+    "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-adblocker": "^2.13.6",
     "puppeteer-extra-plugin-anonymize-ua": "^2.4.4",
     "puppeteer-extra-plugin-block-resources": "^2.4.3",
