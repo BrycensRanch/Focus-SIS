@@ -12,7 +12,7 @@
     "puppeteer-extra": "^3.3.4",
     "puppeteer-extra-plugin-adblocker": "^2.13.5",
     "puppeteer-extra-plugin-anonymize-ua": "^2.4.4",
-    "puppeteer-extra-plugin-block-resources": "^2.4.2",
+    "puppeteer-extra-plugin-block-resources": "^2.4.3",
     "puppeteer-extra-plugin-stealth": "^2.11.1"
   },
   "scripts": {
