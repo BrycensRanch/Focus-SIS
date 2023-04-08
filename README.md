@@ -9,6 +9,11 @@
 
 > ⚠️ I take no responsibility if you get punished for using this, if we go down, we go down together! ⚠️
 
+## IMPORTANT: NOT WORKING ATM
+
+This tool no longer works on the new redesigned version of SIS due to change of selectors and various things.
+Update coming soon, but it's not exactly my highest priority. Godspeed.
+
 Logins into SIS and scrapes grades and quarter for current classes, not to mention every class you've had in SIS, thanks to the "Grades" page.
 
 ## How this was made possible?
