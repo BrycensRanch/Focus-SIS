@@ -5,13 +5,11 @@ const SISFocusBaseURL = 'https://sis.palmbeachschools.org/focus';
 
 // puppeteer-extra is a drop-in replacement for puppeteer,
 // it augments the installed puppeteer with plugin functionality
-const puppeteer = require('puppeteer-extra')
-const {createCursor } = require('ghost-cursor')
-const {
-    DEFAULT_INTERCEPT_RESOLUTION_PRIORITY
-} = require('puppeteer')
+import puppeteer from 'puppeteer-extra';
 
-const {PuppeteerScreenRecorder} = require('puppeteer-screen-recorder');
+import { createCursor } from 'ghost-cursor';
+import { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } from 'puppeteer';
+import { PuppeteerScreenRecorder } from 'puppeteer-screen-recorder';
 
 const Config = {
   followNewTab: true,
@@ -30,33 +28,41 @@ const Config = {
   },
   aspectRatio : '4:3'
 };
+
 // add stealth plugin and use defaults (all evasion techniques)
-const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+
 puppeteer.use(StealthPlugin());
 
-const shellExec = require('shell-exec').default;
+import {execa as shellExec} from 'execa';
 
 // puppeteer.use(require('puppeteer-extra-plugin-anonymize-ua')()) We don't need
 // A new device has been associated with your Focus account messages
-const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
+import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker';
+
 puppeteer.use(AdblockerPlugin({
   // Optionally enable Cooperative Mode for several request interceptors
   interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY
 }));
-const creds = require('./creds.json');
-const getGrade = require('./grade.js')
-const fs = require('fs-extra')
-var util = require("util");
-const getBrowserPath = require("./getBrowser.js")
-const browserPath = getBrowserPath()
- 
-const puppeterOptions = {
-    headless: false,
-    browserPath ? executablePath: browserPath : '':'',
-    args: []
+import creds from './creds.json' assert { type: 'json' };
+import getGrade from './grade.js';
+import fs from 'fs-extra';
+import util from 'util';
+import getBrowserPath from './getBrowser.js';
+
+var puppeterOptions = {
+  headless: false,
+  args: []
 };
 
 async function runTheSexyCode() {
+  const browserPath = await getBrowserPath()
+console.log("Browser path is", browserPath)
+ 
+if (browserPath) {
+  puppeterOptions.executablePath = browserPath
+}
+
   const browser = await puppeteer.launch(puppeterOptions);
   const initPage = (await browser.pages())[0];
   const page = await browser.newPage();
@@ -91,16 +97,19 @@ async function runTheSexyCode() {
     console.log(2);
     // await page.waitForNavigation({     waitUntil: 'networkidle2', });
     console.log(3);
-    await cursor.click('#button-enboardsso-sp');
+    // await cursor.click('#identification');
     console.log(4);
 
     // await page.waitForNavigation({     waitUntil: 'networkidle2', });
     console.log(5);
-    await page.type('#Username', creds.username, {delay: 20});
+    await page.waitForSelector('#identification');
+    await page.type('#identification', creds.username, {delay: 20});
     console.log(6);
-    await page.type('#Password', creds.password, {delay: 20});
+    await cursor.click('#authn-go-button');
+    await page.waitForSelector('#ember532');
+    await page.type('#ember532', creds.password, {delay: 20});
     console.log(7);
-    await cursor.click('#login-button');
+    await cursor.click('#authn-go-button');
     await page.waitForNavigation({waitUntil: 'networkidle2'});
     const loginFormExists = await page.$eval('#main-login-form', () => true).catch(
       () => false
@@ -151,12 +160,10 @@ async function runTheSexyCode() {
   // browser.close()
   const cursor = createCursor(page);
   await page.waitForSelector(
-    'body > div.site-container.sis-package > div.site-middle > nav > div.parent-men' +
-    'u-options-container > div.parent-menu-icons > a:nth-child(7)'
+    'body > div.site-container.sis-package > div.site-middle > nav > div.parent-menu-options-container > div.parent-menu-icons > a:nth-child(8)'
   );
   await cursor.click(
-    'body > div.site-container.sis-package > div.site-middle > nav > div.parent-men' +
-    'u-options-container > div.parent-menu-icons > a:nth-child(7)'
+    'body > div.site-container.sis-package > div.site-middle > nav > div.parent-menu-options-container > div.parent-menu-icons > a:nth-child(8)'
   );
   const formSubmitButtonSelector = 'body > div.site-container.sis-package > div.site-middle > div > main > div > d' +
   'iv.student-grades-top > form > button'
@@ -249,7 +256,7 @@ async function runTheSexyCode() {
             detailedClassDetails[`${quarter.toLowerCase()}_mp_grade_href`],
             {waitUntil: 'networkidle2'}
           );
-          const parser = require('any-date-parser');
+          const parser = (await import('any-date-parser')).default
 
           const rawClassAssignments = await assignmentPage.evaluate(() => Array.from(
             document.querySelectorAll('.grades-grid > tbody > tr'),
