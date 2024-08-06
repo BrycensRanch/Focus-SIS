@@ -7,7 +7,7 @@
   </p>
 </div>
 
-> ⚠️ I take no responsibility if you get punished for using this, if we go down, we go down together! ⚠️
+> ⚠️ I take no responsibility if you get punished for using this. Also, I graduated so I am no longer testing this project. It should work as SIS' code hardly changes.
 
 ## IMPORTANT: NOT WORKING ATM
 
