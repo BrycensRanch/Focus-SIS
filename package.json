@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "any-date-parser": "^1.5.4",
+    "any-date-parser": "^2.0.0",
     "edge-paths": "^3.0.0",
     "fs-extra": "^11.1.1",
     "ghost-cursor": "^1.1.18",
